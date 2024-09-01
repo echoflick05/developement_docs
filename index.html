@@ -44,6 +44,12 @@
                             <li>
                                 <a href="#send_group_message">Send Group Message</a>
                             </li>
+                            <li>
+                                <a href="#get_active_channels">Get Active Channel</a>
+                            </li>
+                            <li>
+                                <a href="#onClientGroup">onClientGroup</a>
+                            </li>
                         </ul>
                     </li>
                 </ul>
@@ -80,7 +86,7 @@
                                         <hr>
                                         <h4 class="my-4" id="cdn_link">Step 1: Include the WebSocket CDN in Your Project
                                         </h4>
-                                        <textarea class="multiple-codes"><script src="https://cdn.jsdelivr.net/gh/echoflick05/roomChat@main/EchoFlick.js"></script></textarea>
+                                        <textarea class="multiple-codes"><script src="https://cdn.jsdelivr.net/gh/echoflick05/roomChat@main/js/echoflick_v1.min.js"></script></textarea>
 
                                         <h4 class="my-4" id="echo_flick_connect">Step 2: Create a WebSocket Connection
                                         </h4>
@@ -197,7 +203,7 @@ wsClient.leaveGroup(groupName);
                                         <p class="mt-2">The <strong>`leaveGroup()`</strong> method is used to remove the current user from the specified group. After this action, the user will no longer receive messages or be part of that group’s activities.</p>
 
 
-                                        <h4 class="my-4" id="send_group_message">Send a Message to grop</h4>
+                                        <h4 class="my-4" id="send_group_message">Send a Message to group</h4>
                                         <p>You can send a message to a specific channel using the <strong>`sendMessage()`</strong> method provided by the WebSocketClient instance. Here’s how you can do it:</p>
 
                                         <textarea class="multiple-codes">  
@@ -219,6 +225,42 @@ wsClient.sendMessage(message, groupName, 'GROUP');
 
                                         <h5 class="mt-4 mb-4">Group Identifier:</h5>
                                         <p class="mt-2">The third parameter, <strong>'GROUP'</strong>, indicates that the message should be sent to all members of the specified group. This differentiates it from messages sent to individual channels or users.</p>
+
+                                        <h4 class="my-4" id="get_active_channels">Get Active Channel</h4>
+                                        <textarea class="multiple-codes">
+async function getActiveChannels(room_name=null){
+    let response = await wsClient.getActiveChannels(room_name);
+}
+                                        </textarea>
+
+                                        <h5 class="mt-4 mb-4">Description:</h5>
+                                        <p class="mt-2">The <strong>`getActiveChannels`</strong> function retrieves active channels from the <strong>`wsClient`</strong>. Depending on whether a <strong>`room_name`</strong> is provided or not, it either fetches details of all users belonging to the specified room or retrieves details of all public users globally.
+                                        </p>
+
+                                        <h5 class="mt-4 mb-4">room_name <i>(optional)</i>:</h5>
+                                        <p class="mt-2">A string representing the name of the room. If provided, the function will return details of users belonging to this specific room. If <strong>`null`</strong> or omitted, the function will return details of all public users globally.
+                                        </p>
+
+                                        <h5 class="mt-4 mb-4">Note:</h5>
+                                        <p class="mt-2">Handle any potential errors that may occur during the asynchronous operation with appropriate <strong>`try-catch`</strong> blocks.</p>
+
+                                        <h4 class="my-4" id="onClientGroup">onClientGroup Method</h4>
+                                        <p>
+                                            The <strong>`onClientGroup`</strong> method of <strong>`wsClient`</strong> is used to listen for real-time notifications about users joining or leaving a group (room). This allows the client to dynamically update the user list or perform other actions based on the group membership changes.
+                                        </p>
+
+                                        <textarea class="multiple-codes">
+wsClient.onClientGroup((response) => {
+    if(response.data === 'joined'){
+        // You logic here
+    }else if(response.data === 'left'){
+        // You logic here
+    }
+});
+                                        </textarea>
+                                        <h5 class="mt-4 mb-4">Callback Function:</h5>
+                                        <p class="mt-2">The method accepts a callback function that will be executed whenever a user joins or leaves a group. The callback function receives a response object as its parameter.</p>
+
                                     </div>
                                 </div>
                             </div>
